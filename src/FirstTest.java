@@ -10,7 +10,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds){
@@ -89,10 +91,14 @@ public class FirstTest {
     @Test
     public void cancelSearch(){
         waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
-        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Java");
-        waitForElementAndClear(By.id("org.wikipedia:id/search_src_text"));
+        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Test");
+
+        waitForElementPresent(By.id("org.wikipedia:id/search_results_list"), "There is no any search results");
+        List results = driver.findElements(By.className("android.widget.LinearLayout"));
+        Assert.assertTrue("There is not as much results as expected",results.size() >= 2);
+
         waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"));
-        waitForElementAbsence(By.id("org.wikipedia:id/search_close_btn"), "lol", 5);
+        waitForElementAbsence(By.id("org.wikipedia:id/search_results_list"),"Results is still here", 5);
     }
 
     @Test
