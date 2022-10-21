@@ -121,4 +121,13 @@ public class FirstTest {
         assertElementHasText(By.id("org.wikipedia:id/search_src_text"), "Search…", "There is no such text here. Expected text: " + "\n" + "Search…");
     }
 
+    @Test
+    public void everyResultHasTheWord(){
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+        waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Java");
+
+        List results = driver.findElements(By.id("org.wikipedia:id/page_list_item_title"));
+        results.forEach(element -> assertElementHasText(By.id("org.wikipedia:id/page_list_item_title"), "Java", "There is no expected value"));
+    }
+
 }
