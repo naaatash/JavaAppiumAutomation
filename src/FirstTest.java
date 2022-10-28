@@ -30,8 +30,8 @@ public class FirstTest {
         return waitForElementPresent(by, "Can't find element by: " + "\n" + by, 5);
     }
 
-    private WebElement waitForElementAndClick(By by){
-        WebElement element = waitForElementPresent(by);
+    private WebElement waitForElementAndClick(By by, String error_message){
+        WebElement element = waitForElementPresent(by, error_message);
         element.click();
         return element;
     }
@@ -82,7 +82,7 @@ public class FirstTest {
 
         while (driver.findElements(by).size() == 0){
             if (already_swiped > max_swipes){
-                waitForElementPresent(by, "Cannot find element");
+                waitForElementPresent(by, error_message);
                 return;
             }
 
@@ -137,29 +137,29 @@ public class FirstTest {
     @Test
     public void searchJava()
     {
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search Wikipedia' placeholder");
         waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Java");
         waitForElementPresent(By.xpath("//*[contains(@text, 'Object-oriented')]"));
     }
 
     @Test
     public void cancelSearch(){
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search Wikipedia' placeholder");
         waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Test");
 
         waitForElementPresent(By.id("org.wikipedia:id/search_results_list"), "There is no any search results");
         List results = driver.findElements(By.className("android.widget.LinearLayout"));
         Assert.assertTrue("There is not as much results as expected",results.size() >= 2);
 
-        waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"));
+        waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"), "Cannot find 'search_close_btn'");
         waitForElementAbsence(By.id("org.wikipedia:id/search_results_list"),"Results is still here", 5);
     }
 
     @Test
     public void compareArticleTitle(){
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search Wikipedia' placeholder");
         waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Java");
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Object-oriented')]"));
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Object-oriented')]"), "Cannot find 'Object-oriented' text");
         WebElement titleElement = waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"));
         String articleTitle = titleElement.getText();
 
@@ -171,13 +171,13 @@ public class FirstTest {
 
     @Test
     public void assertElementHasExpectedText(){
-        waitForElementAndClick(By.id("org.wikipedia:id/search_container"));
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"), "Cannot find 'search_container'");
         assertElementHasText(By.id("org.wikipedia:id/search_src_text"), "Search…", "There is no such text here. Expected text: " + "\n" + "Search…");
     }
 
     @Test
     public void everyResultHasTheWord(){
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search wikipedia'");
         waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Java");
 
         List results = driver.findElements(By.id("org.wikipedia:id/page_list_item_title"));
@@ -186,40 +186,40 @@ public class FirstTest {
 
     @Test
     public void testSwipeArticle(){
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search wikipedia'");
         waitForElementAndSendKeys(By.xpath("//*[contains(@text, 'Search…')]"), "Appium");
-        waitForElementAndClick(By.xpath("//*[contains(@text, 'Automation')]"));
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Automation')]"), "Cannot find 'Automation'");
         swipeUpToFindElement(By.id("org.wikipedia:id/page_external_link"), "cant find element", 10);
     }
 
     @Test
     public void saveAndDeleteArticle(){
         waitForElementAndClick
-                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search wikipedia'");
         waitForElementAndSendKeys
                 (By.xpath("//*[contains(@text, 'Search…')]"), "Java");
         waitForElementAndClick
-                (By.xpath("//*[contains(@text, 'Object-oriented')]"));
+                (By.xpath("//*[contains(@text, 'Object-oriented')]"), "Cannot find element");
 
         waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc='More options']"));
+                By.xpath("//android.widget.ImageView[@content-desc='More options']"), "Cannot find element");
         waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Add to reading list')]"));
+                By.xpath("//*[contains(@text, 'Add to reading list')]"), "Cannot find element");
         waitForElementAndClick(
-                By.id("org.wikipedia:id/onboarding_button"));
+                By.id("org.wikipedia:id/onboarding_button"), "Cannot find element");
         waitForElementAndClear(
                 By.id("org.wikipedia:id/text_input"));
         waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/text_input"), "My list");
         waitForElementAndClick(
-                By.id("android:id/button1"));
+                By.id("android:id/button1"), "Cannot find OK button");
         waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"));
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"), "Cannot find element");
         waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']/android.widget.ImageView"));
+                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']/android.widget.ImageView"), "Cannot find element");
 
         waitForElementAndClick(
-                By.id("org.wikipedia:id/item_title"));
+                By.id("org.wikipedia:id/item_title"), "Cannot find element");
 
         WebElement item = waitForElementPresent(
                         By.id("org.wikipedia:id/page_list_item_title"),
@@ -238,7 +238,7 @@ public class FirstTest {
     @Test
     public void amountOfNoEmptySearch(){
         waitForElementAndClick
-                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search wikipedia'");
         String search_line = "Linkin Park discography";
         waitForElementAndSendKeys
                 (By.xpath("//*[contains(@text, 'Search…')]"), search_line);
@@ -256,7 +256,7 @@ public class FirstTest {
     @Test
     public void testAmountOfEmptySearch(){
         waitForElementAndClick
-                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search wikipedia'");
         String search_line = "lnubkghfdfvbgyun";
 
         waitForElementAndSendKeys
@@ -321,7 +321,7 @@ public class FirstTest {
     public void testCheckArticleInBackground()
     {
         waitForElementAndClick
-                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"));
+                (By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search wikipedia'");
         waitForElementAndSendKeys
                 (By.xpath("//*[contains(@text, 'Search…')]"), "Java");
         waitForElementPresent
@@ -333,4 +333,92 @@ public class FirstTest {
                 (By.xpath("//*[contains(@text, 'Object-oriented')]"), "Cannot find article after returning from background");
     }
 
+    @Test
+    public void testSaveTwoArticlesAndDeleteOneOfThem(){
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search wikipedia'"
+        );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Object-oriented')]"),
+                "Cannot find 'Object-oriented' text in articles"
+        );
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                "Cannot find 'More options' button");
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Add to reading list')]"),
+                "Cannot find 'Add to reading list'");
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Cannot find onboarding_button");
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/text_input"));
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                "My list");
+
+        waitForElementAndClick(
+                By.id("android:id/button1"),
+                "Cannot find OK button");
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"), "Cannot find 'close' button");
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search wikipedia'"
+        );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Appium"
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Automation')]"),
+                "Cannot find 'Automation' text in articles"
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                "Cannot find 'More options' button");
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Add to reading list')]"),
+                "Cannot find 'Add to reading list'");
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_title"),
+                "Cannot find 'My reading list'");
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"), "Cannot find 'close' button");
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']/android.widget.ImageView"), "Cannot find 'My lists'");
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_title"), "Cannot open first list in 'My lists screen'");
+
+
+        WebElement appiumArticle = waitForElementPresent(
+                By.xpath("//*[@text='Appium']"),
+                "Cannot find item in list");
+
+        WebElement javaArticle = waitForElementPresent(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Cannot find item in list");
+
+        String javaArticleTitle = javaArticle.getText();
+
+        swipeElementToLeft(
+                By.xpath("//*[@text='Appium']"),
+                "Cannot swipe element");
+
+        waitForElementAndClick(By.id("org.wikipedia:id/page_list_item_container"), "cant find and open article in list");
+
+        WebElement openedArticle = waitForElementPresent(By.id("org.wikipedia:id/view_page_title_text"));
+        String openedArticleTitle = openedArticle.getText();
+        Assert.assertEquals(javaArticleTitle, openedArticleTitle);
+
+    }
 }
