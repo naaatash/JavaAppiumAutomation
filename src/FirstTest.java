@@ -421,4 +421,11 @@ public class FirstTest {
         Assert.assertEquals(javaArticleTitle, openedArticleTitle);
 
     }
+
+    @Test
+    public void assertArticleHasTitle(){
+        waitForElementAndClick(By.id("org.wikipedia:id/view_featured_article_card_image"), "Cannot open Featured article");
+        WebElement element = driver.findElement(By.id("org.wikipedia:id/view_page_title_text"));
+        Assert.assertNotNull(element);
+    }
 }
