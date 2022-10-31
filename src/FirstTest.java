@@ -35,6 +35,11 @@ public class FirstTest {
         element.click();
         return element;
     }
+    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds){
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        element.click();
+        return element;
+    }
     private WebElement waitForElementAndSendKeys(By by, String value){
         WebElement element = waitForElementPresent(by);
         element.sendKeys(value);
@@ -127,6 +132,7 @@ public class FirstTest {
         capabilities.setCapability("app", "/Users/user/Projects/JavaAppiumAutomation/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver.rotate(ScreenOrientation.PORTRAIT);
     }
     @After
     public void tearDown()
@@ -278,45 +284,43 @@ public class FirstTest {
         }
     }
 
-//    private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeOutInSeconds)
-//    {
-//        WebElement element = waitForElementPresent(
-//                by,
-//                error_message,
-//                timeOutInSeconds
-//        );
-//        return element.getAttribute(attribute);
-//    }
+    private String waitForElementAndGetText(By by, String error_message, long timeOutInSeconds)
+    {
+        WebElement element = waitForElementPresent(
+                by,
+                error_message,
+                timeOutInSeconds
+        );
+        return element.getText();
+    }
 
-//    @Test
-//    public void changeScreenOrientationOnSearchResults()
-//    {
-//        waitForElementAndClick(
-//                By.xpath("//*[contains(@text, 'Search Wikipedia')]"
-//                ));
-//
-//        waitForElementAndSendKeys(
-//                By.xpath(
-//                        "//*[contains(@text, 'Search…')]"
-//                ),
-//                "Java"
-//        );
-//
-//        waitForElementAndClick(
-//                By.xpath("//*[contains(@text, 'Object-oriented')]"));
-//
-//        String title_before_rotation = waitForElementAndGetAttribute(
-//                By.id("org.wikipedia:id/view_page_title_text"),
-//                "text",
-//                "cannot find title text",
-//                15);
-//        System.out.println(title_before_rotation);
-//        driver.rotate(ScreenOrientation.LANDSCAPE);
-//
-//        String title_after_rotation = waitForElementAndGetAttribute(By.id("org.wikipedia:id/view_page_title_text"), "text", "cannot find title text", 5);
-//
-//        Assert.assertEquals("Article title have been changed after screen rotation", title_before_rotation, title_after_rotation);
-//    }
+    @Test
+    public void changeScreenOrientationOnSearchResults()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"), "Cannot find 'Search Wikipedia' input");
+
+        String search_line = "Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_line
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Object-oriented')]"),
+                "Cannot find 'Object-oriented' article", 15);
+
+        String title_before_rotation = waitForElementAndGetText(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "cannot find title text",
+                15);
+        System.out.println(title_before_rotation);
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+
+        String title_after_rotation = waitForElementAndGetText(By.id("org.wikipedia:id/view_page_title_text"), "cannot find title text", 5);
+
+        Assert.assertEquals("Article title have been changed after screen rotation", title_before_rotation, title_after_rotation);
+    }
     @Test
     public void testCheckArticleInBackground()
     {
@@ -427,5 +431,20 @@ public class FirstTest {
         waitForElementAndClick(By.id("org.wikipedia:id/view_featured_article_card_image"), "Cannot open Featured article");
         WebElement element = driver.findElement(By.id("org.wikipedia:id/view_page_title_text"));
         Assert.assertNotNull(element);
+    }
+
+    @Test
+    public void testWithLandscapeOrientation(){
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+    }
+    @Test
+    public void testCheckPortraitOrientation(){
+        String expectedOrientation = "PORTRAIT";
+        String actualOrientation = driver.getOrientation().toString();
+        Assert.assertEquals(expectedOrientation, actualOrientation);
+    }
+    @Test
+    public void secondTestWithLandscapeOrientation(){
+        driver.rotate(ScreenOrientation.LANDSCAPE);
     }
 }
