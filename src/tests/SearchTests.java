@@ -33,7 +33,6 @@ public class SearchTests extends CoreTestCase {
         assertTrue("We found too few results", amount_of_search_results > 0);
     }
 
-
     @Test
     public void testAmountOfEmptySearch(){
         SearchPageObject SearchPageObject = new SearchPageObject(driver);
@@ -42,5 +41,18 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_line);
         SearchPageObject.getEmptySearchResultLabel();
         SearchPageObject.assertThereIsNoSearchResult(search_line);
+    }
+
+    @Test
+    public void testSearchForElementByTitleAndDescription()
+    {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        String title = "Coffee";
+        String description = "Brewed beverage made from seeds of Coffea genus";
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(title);
+        SearchPageObject.waitForSearchResult(title);
+        SearchPageObject.waitForElementByTitleAndDescription(title, description);
     }
 }

@@ -3,6 +3,7 @@ package lib.ui;
 import io.appium.java_client.AppiumDriver;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -12,9 +13,11 @@ public class SearchPageObject extends MainPageObject{
         SEARCH_INIT = "//*[contains(@text, 'Search Wikipedia')]",
         SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
         SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
-        SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container'] //*[contains(@text,'{SUBSTRING}')]",
         SEARCH_RESULT_LOCATOR = "org.wikipedia:id/view_list_card_list",
-        EMPTY_SEARCH_RESULT_LABEL = "//*[@text='No results found']";
+        EMPTY_SEARCH_RESULT_LABEL = "//*[@text='No results found']",
+        SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container'] //*[contains(@text,'{SUBSTRING}')]",
+        SEARCH_RESULT_TITLE_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_title' and (@text='{SUBSTRING}')]",
+        SEARCH_RESULT_DESCRIPTION_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_description' and (@text='{SUBSTRING}')]";
 
     public SearchPageObject(AppiumDriver driver)
     {
@@ -26,7 +29,23 @@ public class SearchPageObject extends MainPageObject{
     {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
+    private static String getSearchResultTitle(String title)
+    {
+        return SEARCH_RESULT_TITLE_TPL.replace("{SUBSTRING}", title);
+    }
+    private static String getSearchResultDescription(String description)
+    {
+        return SEARCH_RESULT_DESCRIPTION_TPL.replace("{SUBSTRING}", description);
+    }
     /* TEMPLATES METHODS */
+
+    public void waitForElementByTitleAndDescription(String title, String description)
+    {
+        String searchResultTitleXpath = getSearchResultTitle(title);
+        String searchResultDescriptionXpath = getSearchResultDescription(description);
+        this.waitForElementPresent(By.xpath(searchResultTitleXpath), "Cannot find search result by title. Check xpath: " + searchResultTitleXpath, 5);
+        this.waitForElementPresent(By.xpath(searchResultDescriptionXpath), "Cannot find result by description. Check xpath: " + searchResultDescriptionXpath, 5);
+    }
 
     public void waitForCancelButtonToAppear()
     {
@@ -81,5 +100,4 @@ public class SearchPageObject extends MainPageObject{
     {
         this.waitForElementAbsence(By.id(getSearchResultElement(search_text)), "Seems like Search results is here " + SEARCH_RESULT_LOCATOR, 5);
     }
-
 }
