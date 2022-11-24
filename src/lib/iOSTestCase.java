@@ -21,8 +21,7 @@ public class iOSTestCase extends TestCase {
         capabilities.setCapability("platformName", "iOS");
         capabilities.setCapability("deviceName", "iPhone 14");
         capabilities.setCapability("platformVersion", "16.1");
-        capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
+        capabilities.setCapability("appPackage", "/Users/user/Projects/JavaAppiumAutomation/JavaAppiumAutomation/apks/Wikipedia.app");
 
         driver = new IOSDriver(new URL(appiumURL), capabilities);
         this.rotateScreenPortrait();

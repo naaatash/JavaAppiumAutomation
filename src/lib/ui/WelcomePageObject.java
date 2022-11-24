@@ -1,0 +1,43 @@
+package lib.ui;
+
+import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.By;
+
+public class WelcomePageObject extends MainPageObject{
+    public WelcomePageObject(AppiumDriver driver) {
+        super(driver);
+    }
+
+    private static final String
+    STEP_LEARN_MORE_LINK = "id:Learn more about Wikipedia",
+    STEP_NEW_WAYS_TO_EXPLORE = "id:New ways to explore",
+    STEP_ADD_OR_EDIT_PREFERRED_LANGUAGE = "id:Add or edit preferred language",
+    STEP_LEARN_MORE_ABOUT_DATA_COLLECTED_LINK = "id:Learn more about data collected",
+    NEXT_LINK = "id:Next",
+    GET_STARTED_BUTTON = "id:Get started";
+
+    public void waitForLearnMoreLink()
+    {
+        this.waitForElementPresent(STEP_LEARN_MORE_LINK, "Cannot find " + STEP_LEARN_MORE_LINK + " link", 10);
+    }
+    public void waitForNewWaysToExploreLink()
+    {
+        this.waitForElementPresent(STEP_NEW_WAYS_TO_EXPLORE, "Cannot find " + STEP_NEW_WAYS_TO_EXPLORE + " link", 10);
+    }
+    public void waitForAddOrEditPreferredLangText()
+    {
+        this.waitForElementPresent(STEP_ADD_OR_EDIT_PREFERRED_LANGUAGE, "Cannot find " + STEP_ADD_OR_EDIT_PREFERRED_LANGUAGE + " link", 10);
+    }
+    public void clickNextButton()
+    {
+        this.waitForElementAndClick(NEXT_LINK, "Cannot find and click " + NEXT_LINK + " button", 10);
+    }
+    public void waitForLearnMoreAboutDataCollectedText()
+    {
+        this.waitForElementPresent(STEP_LEARN_MORE_ABOUT_DATA_COLLECTED_LINK, "Cannot find " + STEP_LEARN_MORE_ABOUT_DATA_COLLECTED_LINK + " link", 10);
+    }
+    public void clickGetStartedButton()
+    {
+        this.waitForElementAndClick(GET_STARTED_BUTTON, "Cannot find and click " + GET_STARTED_BUTTON + " button", 10);
+    }
+}
