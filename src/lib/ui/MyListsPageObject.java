@@ -1,10 +1,11 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 
-public class MyListsPageObject extends MainPageObject{
-    public static final String
-    ELEMENT_BY_NAME_TPL = "xpath://*[contains(@text, '{ELEMENT_NAME}')]";
+abstract public class MyListsPageObject extends MainPageObject{
+    protected static String
+    ELEMENT_BY_NAME_TPL;
     private static String getElementXpathByName(String nameOfFolder)
     {
         return ELEMENT_BY_NAME_TPL.replace("{ELEMENT_NAME}", nameOfFolder);
@@ -22,6 +23,9 @@ public class MyListsPageObject extends MainPageObject{
         this.waitForArticleApearByTitle(articleTitle);
         this.swipeElementToLeft(getElementXpathByName(articleTitle), "Cannot find and swipe article");
         this.waitForArticleDisapearByTitle(articleTitle);
+        if(Platform.getInstance().isIos()){
+            this.clickElementToTheRightUpperCorner(articleTitle, "Cannot find and swipe element to delete. Locator:" + articleTitle);
+        }
 
     }
 

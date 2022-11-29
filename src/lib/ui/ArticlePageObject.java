@@ -1,22 +1,19 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject{
-    private static final String
-    TITLE = "id:org.wikipedia:id/view_page_title_text",
-    FOOTER_ELEMENT = "id:org.wikipedia:id/page_external_link",
-    OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-    OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[contains(@text, 'Add to reading list')]",
-    ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-    MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-    OK_BUTTON = "id:android:id/button1",
-    CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']";
-
-
-
-
+abstract public class ArticlePageObject extends MainPageObject{
+    protected static String
+    TITLE,
+    FOOTER_ELEMENT,
+    OPTIONS_BUTTON,
+    OPTIONS_ADD_TO_MY_LIST_BUTTON,
+    ADD_TO_MY_LIST_OVERLAY,
+    MY_LIST_NAME_INPUT,
+    OK_BUTTON,
+    CLOSE_ARTICLE_BUTTON;
     public ArticlePageObject(AppiumDriver driver)
     {
         super(driver);
@@ -30,15 +27,25 @@ public class ArticlePageObject extends MainPageObject{
     public String getArticleTitle()
     {
         WebElement titleElement = waitForTitleElement();
+        if (Platform.getInstance().isAndroid()){
         return titleElement.getAttribute("text");
+        }
+        else return titleElement.getAttribute("name");
     }
 
     public void swipeToFooter()
     {
-        this.swipeUpToFindElement(
-                FOOTER_ELEMENT,
-                "Cannot find footer element", 15
-        );
+        if (Platform.getInstance().isAndroid()){
+            this.swipeUpToFindElement(
+                    FOOTER_ELEMENT,
+                    "Cannot find footer element", 15
+            );
+        }
+        else {
+            this.swipeUpTillElementAppear(FOOTER_ELEMENT,
+                    "Cannot find the end of article",
+                    15);
+        }
     }
 
     public void addArticleToMyList(String nameOfFolder)
@@ -60,5 +67,8 @@ public class ArticlePageObject extends MainPageObject{
     {
         this.waitForElementAndClick(
                 CLOSE_ARTICLE_BUTTON, "Cannot find element");
+    }
+    public void addArticlesToMySaved(){
+        this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Cannot find option to add article to reading list", 5);
     }
 }
