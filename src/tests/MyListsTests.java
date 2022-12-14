@@ -14,13 +14,14 @@ import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
     private static final String NAME_OF_FOLDER = "My list";
+    SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+    ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
+    NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+
+    MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
+
     @Test
     public void testSaveTwoArticlesAndDeleteOneOfThem(){
-        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
-        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
-
-        MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");

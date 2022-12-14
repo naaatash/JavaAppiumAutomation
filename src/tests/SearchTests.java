@@ -49,7 +49,7 @@ public class SearchTests extends CoreTestCase {
     {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         String title = "Coffee";
-        String description = "Brewed beverage made from seeds of Coffea genus";
+        String description = "Brewed beverage made from seeds of Coffee genus";
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(title);

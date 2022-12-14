@@ -131,7 +131,7 @@ public class MainPageObject {
         String locator = explored_locator[1];
 
         switch (by_type){
-            case "xcode":
+            case "xpath":
                 return By.xpath(locator);
             case "id":
                 return By.id(locator);
